@@ -37,3 +37,7 @@ I created the dataset by taking a video of myself performing kettlebell swings. 
  
  [![](https://img.youtube.com/vi/X_aL2QOQwiw/0.jpg)](https://youtu.be/X_aL2QOQwiw "Video Explanation")
  
+ ## Resources:
+ - https://www.geeksforgeeks.org/python-opencv-dense-optical-flow/
+ - https://towardsdatascience.com/how-i-created-the-workout-movement-counting-app-using-deep-learning-and-optical-flow-89f9d2e087ac
+ 
