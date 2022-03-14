@@ -32,3 +32,8 @@ I created the dataset by taking a video of myself performing kettlebell swings. 
  
  ## Results
  With an accuracy of around 85%, I was able to use the CNN output to determine whether or not a kettlebell swing was completed. With regard to how this was done, I simply determined whether or not the upward motion of the kettlebell swing was completed by determining a minimum threshold for the upward motion. With the model that was trained, 8 was an adequate number. For a demo, refer to the video.
+ 
+ ## Demo Video
+ 
+ [![](https://img.youtube.com/vi/X_aL2QOQwiw/0.jpg)](https://youtu.be/X_aL2QOQwiw "Video Explanation")
+ 
