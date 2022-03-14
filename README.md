@@ -4,7 +4,7 @@
 This is a program that can be used to count the number of kettlebell swings that are being performed. It uses the Dense Optical Flow Algorithm as well as a Convolutional Neural Network. I created the dataset myself by taking a video of myself performing kettlebell swings.
 
 ## Dataset
-I created the dataset by taking a video of myself performing kettlebell swings. I then ran the video through a Dense Optical Flow Algorithm and condensed the frames to a size of 64 x 64. Each of the frames were labeled as either "UP", "DOWN", or "NOTHING".
+I created the dataset by taking a video of myself performing kettlebell swings. I then ran the video through a Dense Optical Flow Algorithm and condensed the frames to a size of 32 x 32. Each of the frames were labeled as either "UP", "DOWN", or "NOTHING".
 
 ## Dense Optical Flow
  A Dense Optical Flow algorithm from opencv was used to display the direction of motion of each frame.
@@ -24,6 +24,9 @@ I created the dataset by taking a video of myself performing kettlebell swings. 
  
  ## Convolutional Neural Network
  Pytorch was used to train a CNN to classify the dense optical flow images.
+ <br>
+ <br>
+ ```python train.py``` can be run to train the model.
  
  ![](analysis/test_losses_accuracies.png)
  
