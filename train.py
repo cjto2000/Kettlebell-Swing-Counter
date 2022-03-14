@@ -1,16 +1,14 @@
-from model import Net
 from torch.utils.data import Dataset, DataLoader
-import time
 import numpy as np
 import torch
 import torchvision
 from model import Net
 import torch.optim as optim
+import matplotlib.pyplot as plt
 
 NUM_IMAGES = 859
 LEARNING_RATE = .01
-EPOCHS = 100
-PRINT_INTERVAL = 20
+EPOCHS = 30
 IMAGE_WIDTH = 32
 IMAGE_HEIGHT = 32
 BATCH_SIZE = 32
@@ -68,7 +66,7 @@ train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size = BATCH_SIZE, shuffle=True)
 
 
-def train(model, device, train_loader, optimizer, epoch, log_interval):
+def train(model, device, train_loader, optimizer):
     model.train()
     losses = []
     for batch_idx, (data, label) in enumerate(train_loader):
@@ -82,29 +80,48 @@ def train(model, device, train_loader, optimizer, epoch, log_interval):
         optimizer.step()
     return np.mean(losses)
 
-def test(model, device, test_loader, log_interval=None):
+def test(model, device, test_loader):
     model.eval()
+    test_loss = 0
     correct = 0
     with torch.no_grad():
         for batch_idx, (data, label) in enumerate(test_loader):
             data, label = data.to(device), label.to(device)
             output = model(data)
-            # test_loss_on = model.loss(output, label, reduction='sum').item()
+            test_loss_on = model.loss(output, label, reduction='sum').item()
+            test_loss += test_loss_on
             pred = output.max(1)[1]
             correct_mask = pred.eq(label.view_as(pred))
             num_correct = correct_mask.sum().item()
             correct += num_correct
+        test_loss /= len(test_loader.dataset)
         test_accuracy = 100 * correct / len(test_loader.dataset)
-    return test_accuracy
+    return test_loss, test_accuracy
 
 model = Net()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
+
+test_losses = []
+test_accuracies = []
 for epoch in range(1, EPOCHS + 1):
-    train_loss = train(model, device, train_loader, optimizer, epoch, PRINT_INTERVAL)
-    test_accuracy = test(model, device, test_loader)
-    print(train_loss)
+    train_loss = train(model, device, train_loader, optimizer)
+    test_loss, test_accuracy = test(model, device, test_loader)
+    test_losses.append(test_loss)
+    test_accuracies.append(test_accuracy)
+    print(epoch)
+    print(f"test_loss = {test_loss}")
     print(f"Test_accuracy = {test_accuracy}")
+
+
+fig, axs = plt.subplots(2)
+fig.subplots_adjust(hspace=0.5)
+fig.suptitle('Test Losses and Accuracies')
+axs[0].plot(test_losses)
+axs[0].set(xlabel='Epochs', ylabel='Loss')
+axs[1].plot(test_accuracies)
+axs[1].set(xlabel='Epochs', ylabel='Accuracy')
+plt.show()
 
 torch.save(model.state_dict(), "model_weights/model.pth")
